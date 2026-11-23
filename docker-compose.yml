@@ -1,0 +1,9 @@
+# Local development database only. Run: npm run db:up (or docker compose up -d)
+services:
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    ports: ["27017:27017"]
+    volumes: ["nexora-mongo:/data/db"]
+volumes:
+  nexora-mongo:
