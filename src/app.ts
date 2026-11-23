@@ -19,7 +19,7 @@ export function createApp() {
   if (!env.isTest) {
     app.use(pinoHttp({ logger, genReqId: (req) => (req as express.Request).id ?? '' }));
   }
-  app.use(helmet());
+  app.use(helmet() as express.RequestHandler);
   app.use(
     cors({
       // Native apps send no Origin header and are not subject to CORS; this protects browser clients (admin web).
@@ -27,7 +27,7 @@ export function createApp() {
       credentials: false,
     }),
   );
-  app.use(express.json({ limit: '100kb' }));
+ app.use(express.json({ limit: '100kb' }) as express.RequestHandler);
 
   app.get('/health', (_req, res) => {
     const dbUp = mongoose.connection.readyState === 1;

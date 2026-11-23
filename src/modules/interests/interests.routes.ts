@@ -22,7 +22,8 @@ router.get('/', authenticate, validate({ query: querySchema }), asyncHandler(asy
     rows.map((r) => ({
       slug: r.slug,
       name: r.name,
-      labels: Object.fromEntries(r.labels ?? []),
+      //labels: Object.fromEntries(r.labels ?? []),
+      labels: Object.fromEntries(Object.entries(r.labels ?? {})),
       isCustom: r.isCustom,
     })),
   );

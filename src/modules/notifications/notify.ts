@@ -8,7 +8,16 @@ interface Input {
   recipient: unknown;
   actor: unknown;
   type: NotificationType;
-  resourceType: 'post' | 'comment' | 'community' | 'user';
+  //resourceType: 'post' | 'comment' | 'community' | 'user';
+  resourceType:
+  | 'post'
+  | 'comment'
+  | 'community'
+  | 'user'
+  | 'exchange'
+  | 'project'
+  | 'task'
+  | 'event';
   resourceId: unknown;
 }
 
