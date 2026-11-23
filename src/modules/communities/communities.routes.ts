@@ -53,12 +53,34 @@ router.get('/:id/posts', idParam, validate({ query: cursorQuerySchema }), asyncH
   const { items, meta } = await listCommunityPosts(uid(req), req.params.id as string, req.query as never);
   ok(res, items, 200, meta);
 }));
+router.get(
+  '/:id/events',
+  idParam,
+  validate({ query: eventListQuerySchema }),
+  asyncHandler(async (req, res) => {
+    const c = await findCommunity(req.params.id as string);
 
+    // Parse the query using the same Zod schema used by the validator.
+    const query = eventListQuerySchema.parse(req.query);
+
+    const r = await listEvents(uid(req), {
+      ...query,
+      community: String(c._id),
+    });
+
+    ok(res, r.items, 200, {
+      nextCursor: r.nextCursor,
+      limit: query.limit,
+    });
+  }),
+);
+/*
 router.get('/:id/events', idParam, validate({ query: eventListQuerySchema }), asyncHandler(async (req, res) => {
   const c = await findCommunity(req.params.id as string);
   const r = await listEvents(uid(req), { ...(req.query as never as { limit: number; cursor?: string; type?: string }), community: String(c._id) });
   ok(res, r.items, 200, { nextCursor: r.nextCursor, limit: Number((req.query as { limit: number }).limit) });
 }));
+*/
 
 router.get('/:id/join-requests', idParam, validate({ query: cursorQuerySchema }), asyncHandler(async (req, res) => {
   const { items, meta } = await svc.listJoinRequests(uid(req), req.params.id as string, req.query as never);
